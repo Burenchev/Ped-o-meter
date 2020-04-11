@@ -1,18 +1,55 @@
-.UsersTable-button {
-    text-transform: capitalize !important;
+.WalkingTable-button {
+    background-color: #EC174F !important;
+    border-radius: 3px !important;
+    max-width: 14px;
+    max-height: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
-.UsersTable-paginagion {
+.WalkingTable-buttonDisabled {
+    background-color: #990F31 !important;
+    border-radius: 3px !important;
+    max-width: 14px;
+    max-height: 14px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.WalkingTable-paginagion {
     display: flex;
     flex-direction: row;
     align-self: flex-end;
 }
 
-.UsersTable-typo {
+.WalkingTable-typo {
     margin: 6px 15px 0px 15px !important;
 }
 
-.UsersTable-tableContainer {
+.WalkingTable-tableContainer {
     height: 315px !important;
-    border: 1px solid grey;
+}
+
+.WalkingTable-headerCell {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.WalkingTable-headerCellTypo {
+    color: white;
+    margin-right: 12px !important;
+    font-size: 14px !important;
+}
+
+.WalkingTable-icon {
+    color: white;
+    font-size: 14px !important;
+}
+
+.MuiTableRow-head {
+    background-color: #1C2025;
+    border: none !important;
 }
