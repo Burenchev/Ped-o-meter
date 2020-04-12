@@ -30,6 +30,7 @@
 
 .WalkingTable-tableContainer {
     height: 315px !important;
+    flex-basis: 30%;
 }
 
 .WalkingTable-headerCell {

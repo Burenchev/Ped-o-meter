@@ -1,0 +1,12 @@
+.WalkingChart-root {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.WalkingChart-header {
+    font-size: 36px !important;
+    font-weight: bold !important;
+    margin-left: 20px !important;
+    margin-bottom: 20px !important;
+}
