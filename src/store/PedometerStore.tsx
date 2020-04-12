@@ -17,6 +17,10 @@ class PedometerStore {
     private _fetchData = () => {
         axios.get(`${BASE_URL}`).then(response => this._data = response.data)
     }
+
+    addItem = (date: Date, distance: number) => {
+        axios.post(`${BASE_URL}`, {date, distance}).then(response => this._fetchData())
+    }
 }
 
 export default PedometerStore

@@ -1,8 +1,8 @@
 import React from 'react';
 import {Typography} from '@material-ui/core';
 import PedometerStore from "./store/PedometerStore"
-import WalkingTable from "./WalkingTable/WalkingTable"
-import WalkingChart from "./WalkingChart/WalkingChart"
+import WalkingTable from "./components/WalkingTable/WalkingTable"
+import WalkingChart from "./components/WalkingChart/WalkingChart"
 import "./App.css"
 
 function App() {

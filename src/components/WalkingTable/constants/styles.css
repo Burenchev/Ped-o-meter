@@ -1,4 +1,7 @@
 .WalkingTable-root {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     max-width: 335px;
     max-height: 490px;
     margin-right: 20px;
@@ -26,16 +29,6 @@
     justify-content: center;
 }
 
-.WalkingTable-paginagion {
-    display: flex;
-    flex-direction: row;
-    align-self: flex-end;
-}
-
-.WalkingTable-typo {
-    margin: 6px 15px 0px 15px !important;
-}
-
 .WalkingTable-tableContainer {
     height: 315px !important;
 }
@@ -60,4 +53,11 @@
 .MuiTableRow-head {
     background-color: #1C2025;
     border: none !important;
+}
+
+.WalkingTable-addButton {
+    width: 100%;
+    height: 60px;
+    background-color: #EC174F !important;
+    border-radius: 0 !important;
 }

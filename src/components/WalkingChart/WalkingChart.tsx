@@ -10,7 +10,7 @@ import {
 import { observer } from "mobx-react-lite";
 import { Typography } from "@material-ui/core";
 import {minBy, maxBy, sumBy} from "lodash"
-import PedometerStore from "../store/PedometerStore";
+import PedometerStore from "../../store/PedometerStore";
 import CustomizedLabel from "./helpers/CustomizedLabel"
 import CustomizedXAxisTick from "./helpers/CustomizedXAxisTick"
 import CustomizedYAxisTick from "./helpers/CustomizedYAxisTick"
