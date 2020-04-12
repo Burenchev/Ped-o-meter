@@ -58,8 +58,8 @@ const getSum = () => {
       <div className="WalkingChart-chartContainer">
         <LineChart width={800} height={320} data={data}>
           <Line type="linear" dataKey="distance" stroke="#EC174F" label={<CustomizedLabel/>} dot={{ stroke: '#EC174F', strokeWidth: 4 }}/>
-          <CartesianGrid stroke="#ccc" />
-          <XAxis dataKey="date" tick={<CustomizedXAxisTick/>} padding={{left: 30, right: 30}}/>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis interval={0} dataKey="date" tick={<CustomizedXAxisTick/>} padding={{left: 30, right: 30}}/>
           <YAxis tick={<CustomizedYAxisTick/>} padding={{top: 30, bottom: 30}}/>
           <Tooltip />
         </LineChart>
