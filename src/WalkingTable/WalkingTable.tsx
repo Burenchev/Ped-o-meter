@@ -90,7 +90,7 @@ class WalkingTable extends React.Component<Props, State> {
     const currentPageNumber = this.state.paginationOffset / PAGINATION_SIZE + 1;
     const key = `${this.state.sortId}-${rows.length}-${this.state.paginationOffset}`;
     return (
-      <>
+      <div className="WalkingTable-root">
         <TableContainer
           className={"WalkingTable-tableContainer"}
           key={key}
@@ -151,7 +151,7 @@ class WalkingTable extends React.Component<Props, State> {
             </Button>
           </div>
         )}
-      </>
+      </div>
     );
   }
 }

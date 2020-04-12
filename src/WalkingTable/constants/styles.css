@@ -1,3 +1,11 @@
+.WalkingTable-root {
+    max-width: 335px;
+    max-height: 490px;
+    margin-right: 20px;
+    border: solid 1px #1C2025;
+    box-shadow: 2px 2px 2px 1px #1C2025;
+}
+
 .WalkingTable-button {
     background-color: #EC174F !important;
     border-radius: 3px !important;
@@ -30,7 +38,6 @@
 
 .WalkingTable-tableContainer {
     height: 315px !important;
-    flex-basis: 30%;
 }
 
 .WalkingTable-headerCell {
