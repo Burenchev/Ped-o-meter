@@ -13,11 +13,13 @@ import {
   Button,
   Modal,
 } from "@material-ui/core";
-import {ArrowUpward} from "@material-ui/icons"
-import InputForm from "../InputForm/InputForm"
+import { ArrowUpward } from "@material-ui/icons";
+import InputForm from "../InputForm/InputForm";
 import { tableCols } from "./constants/constants";
 import { sortBy } from "lodash";
+import { Scrollbars } from "react-custom-scrollbars";
 import "./constants/styles.css";
+import DateRenderer from "../DateRenderer/DateRenderer";
 
 type Props = {
   store: PedometerStore;
@@ -28,8 +30,8 @@ type State = {
 };
 
 const WalkingTable: React.FC<Props> = observer((props: Props) => {
-  const [sortId, setSortId] = React.useState<string>("date")
-  const [modalOpen, setModalOpen] = React.useState<boolean>(false)
+  const [sortId, setSortId] = React.useState<string>("date");
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
 
   const getSortedRows = () => {
     const rows: any[] = props.store.data.slice();
@@ -43,34 +45,78 @@ const WalkingTable: React.FC<Props> = observer((props: Props) => {
 
   const renderCell = (content: number | string, id: string) => {
     if (id === "date") {
-      const parsedDate = new Date(content);
-      return parsedDate.toLocaleDateString("ru");
+      return <DateRenderer date={content as string} />;
     } else {
-      return content;
+      const metersNumber = (content as number) % 1000;
+      const meters = metersNumber ? `${metersNumber}` : "";
+      const metersLastSymbol = !meters ? "" : meters[meters.length - 1];
+      const metersMessage = !metersLastSymbol
+        ? ""
+        : metersLastSymbol === "1"
+        ? "метр"
+        : metersLastSymbol === "2" ||
+          metersLastSymbol === "3" ||
+          metersLastSymbol === "4"
+        ? "метра"
+        : "метров";
+      const kilometers = `${Math.floor((content as number) / 1000)}`;
+      const kilometersLastSymbol = kilometers[kilometers.length - 1];
+      const kilometersMessage =
+        kilometersLastSymbol === "1"
+          ? "километр"
+          : kilometersLastSymbol === "2" ||
+            kilometersLastSymbol === "3" ||
+            kilometersLastSymbol === "4"
+          ? "километра"
+          : "километров";
+      return `${kilometers} ${kilometersMessage} ${meters} ${metersMessage}`;
     }
   };
-    const rows = getSortedRows();
-    const key = `${sortId}`;
-    return (
-      <div className="WalkingTable-root">
-        <TableContainer
-          className={"WalkingTable-tableContainer"}
-          key={key}
+  const rows = getSortedRows();
+  const key = `${sortId}`;
+  return (
+    <div className="WalkingTable-root">
+      <TableContainer className={"WalkingTable-tableContainer"} key={key}>
+        <Scrollbars
+          autoHeight
+          autoHeightMin={435}
+          hideTracksWhenNotNeeded
+          renderTrackVertical={({ style, ...props }) => (
+            <div
+              {...props}
+              style={{ ...style, backgroundColor: "#1C2025", width: "3px", height: "100%", right: "0px", bottom: "0px" }}
+            />
+          )}
+          renderThumbVertical={({ style, ...props }) => (
+            <div
+              {...props}
+              style={{ ...style, backgroundColor: "#EC174F", width: "3px", borderRadius: "50%" }}
+            />
+          )}
         >
-          <Table size="small">
+          <Table stickyHeader size="small">
             <TableHead>
               <TableRow>
                 {tableCols.map((col) => (
                   <TableCell key={col.id}>
                     <div className={"WalkingTable-headerCell"}>
-                      <Typography className={"WalkingTable-headerCellTypo"}>{col.name}</Typography>
+                      <Typography className={"WalkingTable-headerCellTypo"}>
+                        {col.name}
+                      </Typography>
                       <IconButton
-                        className={sortId === col.id? "WalkingTable-buttonDisabled" : "WalkingTable-button"}
+                        className={
+                          sortId === col.id
+                            ? "WalkingTable-buttonDisabled"
+                            : "WalkingTable-button"
+                        }
                         disabled={sortId === col.id}
                         onClick={handleClick(col.id)}
                         size={"small"}
                       >
-                        <ArrowUpward className={"WalkingTable-icon"} fontSize={"small"}/>
+                        <ArrowUpward
+                          className={"WalkingTable-icon"}
+                          fontSize={"small"}
+                        />
                       </IconButton>
                     </div>
                   </TableCell>
@@ -78,8 +124,8 @@ const WalkingTable: React.FC<Props> = observer((props: Props) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
-                <TableRow key={row["id"]}>
+              {rows.map((row, index) => (
+                <TableRow key={row["id"]} className={index%2? "WalkingTable-rowOdd": "WalkingTable-rowEven"}>
                   {tableCols.map((col) => (
                     <TableCell key={row[col.id]}>
                       {renderCell(row[col.id], col.id)}
@@ -89,13 +135,19 @@ const WalkingTable: React.FC<Props> = observer((props: Props) => {
               ))}
             </TableBody>
           </Table>
-        </TableContainer>
-        <Button className="WalkingTable-addButton" onClick={() => setModalOpen(true)}>Добавить запись</Button>
-        <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
-          <InputForm store={props.store}/>
-        </Modal>
-      </div>
-    );
-})
+        </Scrollbars>
+      </TableContainer>
+      <Button
+        className="WalkingTable-addButton"
+        onClick={() => setModalOpen(true)}
+      >
+        Добавить запись
+      </Button>
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
+        <InputForm store={props.store} onClose={() => setModalOpen(false)} />
+      </Modal>
+    </div>
+  );
+});
 
 export default WalkingTable;

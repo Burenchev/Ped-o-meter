@@ -8,6 +8,7 @@ import { Button, TextField, Typography } from "@material-ui/core";
 
 type Props = {
   store: PedometerStore;
+  onClose: () => void;
   id?: number;
 };
 
@@ -17,6 +18,7 @@ const InputForm: React.FC<Props> = (props: Props) => {
 
   const handleApply = () => {
     props.store.addItem(date, distance);
+    props.onClose();
   };
 
   return (
@@ -37,7 +39,7 @@ const InputForm: React.FC<Props> = (props: Props) => {
       </div>
       <div className="InputForm-buttonBase">
         <Button color="primary" variant="contained" onClick={handleApply}>Применить</Button>
-        <Button color="secondary" variant="contained">Отменить</Button>
+        <Button color="secondary" variant="contained" onClick={props.onClose}>Отменить</Button>
       </div>
     </div>
   );

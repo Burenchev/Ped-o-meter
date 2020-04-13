@@ -9,11 +9,12 @@ import {
 } from "recharts";
 import { observer } from "mobx-react-lite";
 import { Typography } from "@material-ui/core";
-import {minBy, maxBy, sumBy} from "lodash"
+import {minBy, maxBy, sumBy, sortBy} from "lodash"
 import PedometerStore from "../../store/PedometerStore";
 import CustomizedLabel from "./helpers/CustomizedLabel"
 import CustomizedXAxisTick from "./helpers/CustomizedXAxisTick"
 import CustomizedYAxisTick from "./helpers/CustomizedYAxisTick"
+import CustomizedTooltip from "./helpers/CustomizedTooltip"
 import "./constants/styles.css";
 
 type Props = {
@@ -22,10 +23,11 @@ type Props = {
 
 const WalkingChart: React.FC<Props> = observer((props: Props) => {
   const data = props.store.data;
+  const sortedData = sortBy(data, "date")
+  const preparedData = sortedData.length > 7 ? sortedData.slice(-7) : sortedData
 
 const getMinimum = () => {
-  const dataToParse = data.length > 7 ? data.slice(-7) : data.slice();
-  const min = minBy(dataToParse, "distance")
+  const min = minBy(preparedData, "distance")
   if (min) {
     return min.distance
   }
@@ -33,8 +35,7 @@ const getMinimum = () => {
 }
 
 const getMaximum = () => {
-  const dataToParse = data.length > 7 ? data.slice(-7) : data.slice();
-  const max = maxBy(dataToParse, "distance")
+  const max = maxBy(preparedData, "distance")
   if (max) {
     return max.distance
   }
@@ -42,8 +43,7 @@ const getMaximum = () => {
 }
 
 const getSum = () => {
-  const dataToParse = data.length > 7 ? data.slice(-7) : data.slice();
-  const sum = sumBy(dataToParse, "distance")
+  const sum = sumBy(preparedData, "distance")
   if (sum) {
     return sum
   }
@@ -56,12 +56,12 @@ const getSum = () => {
         Суммарная активность
       </Typography>
       <div className="WalkingChart-chartContainer">
-        <LineChart width={800} height={320} data={data}>
+        <LineChart width={800} height={320} data={preparedData}>
           <Line type="linear" dataKey="distance" stroke="#EC174F" label={<CustomizedLabel/>} dot={{ stroke: '#EC174F', strokeWidth: 4 }}/>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis interval={0} dataKey="date" tick={<CustomizedXAxisTick/>} padding={{left: 30, right: 30}}/>
           <YAxis tick={<CustomizedYAxisTick/>} padding={{top: 30, bottom: 30}}/>
-          <Tooltip />
+          <Tooltip content={<CustomizedTooltip/>} />
         </LineChart>
       </div>
       <div className="WalkingChart-footer">

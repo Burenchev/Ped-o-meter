@@ -30,7 +30,7 @@
 }
 
 .WalkingTable-tableContainer {
-    height: 315px !important;
+    height: 100%;
 }
 
 .WalkingTable-headerCell {
@@ -50,8 +50,8 @@
     font-size: 14px !important;
 }
 
-.MuiTableRow-head {
-    background-color: #1C2025;
+.MuiTableCell-head {
+    background-color: #1C2025 !important;
     border: none !important;
 }
 
@@ -60,4 +60,12 @@
     height: 60px;
     background-color: #EC174F !important;
     border-radius: 0 !important;
+}
+
+.WalkingTable-rowOdd {
+    background-color: white;
+}
+
+.WalkingTable-rowEven {
+    background-color: #EFEFF0;
 }

@@ -15,7 +15,14 @@ class PedometerStore {
     }
 
     private _fetchData = () => {
-        axios.get(`${BASE_URL}`).then(response => this._data = response.data)
+        axios.get(`${BASE_URL}`).then(response => {
+            this._data = response.data;
+            this._data.forEach(item => {
+                if (typeof item.distance === "string") {
+                    item.distance = parseInt(item.distance)
+                }
+            })  
+        } )
     }
 
     addItem = (date: Date, distance: number) => {

@@ -30,3 +30,15 @@
     color: white;
     font-size: 18px;
 }
+
+.CustomizedTooltip-distance {
+    color: #EC174F;
+    font-size: 12px !important;
+}
+
+.CustomizedTooltip-root {
+    background-color: white;
+    border: 1px solid grey;
+    border-radius: 3px;
+    padding: 5px;
+}
