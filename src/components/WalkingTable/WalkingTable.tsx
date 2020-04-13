@@ -104,30 +104,6 @@ const WalkingTable: React.FC<Props> = observer((props: Props) => {
           autoHeight
           autoHeightMin={435}
           hideTracksWhenNotNeeded
-          renderTrackVertical={({ style, ...props }) => (
-            <div
-              {...props}
-              style={{
-                ...style,
-                backgroundColor: "#1C2025",
-                width: "3px",
-                height: "100%",
-                right: "0px",
-                bottom: "0px",
-              }}
-            />
-          )}
-          renderThumbVertical={({ style, ...props }) => (
-            <div
-              {...props}
-              style={{
-                ...style,
-                backgroundColor: "#EC174F",
-                width: "3px",
-                borderRadius: "50%",
-              }}
-            />
-          )}
         >
           <Table stickyHeader size="small">
             <TableHead>
