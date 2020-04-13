@@ -12,12 +12,15 @@ import {
   IconButton,
   Button,
   Modal,
+  Menu,
+  MenuItem,
 } from "@material-ui/core";
 import { ArrowUpward } from "@material-ui/icons";
 import InputForm from "../InputForm/InputForm";
 import { tableCols } from "./constants/constants";
 import { sortBy } from "lodash";
 import { Scrollbars } from "react-custom-scrollbars";
+import { DBItem } from "../../store/types";
 import "./constants/styles.css";
 import DateRenderer from "../DateRenderer/DateRenderer";
 
@@ -25,16 +28,14 @@ type Props = {
   store: PedometerStore;
 };
 
-type State = {
-  sortId: string;
-};
-
 const WalkingTable: React.FC<Props> = observer((props: Props) => {
   const [sortId, setSortId] = React.useState<string>("date");
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  const [anchorEl, setAnchorEl] = React.useState<any>(null);
+  const [itemToEdit, setItemToEdit] = React.useState<DBItem | null>(null);
 
   const getSortedRows = () => {
-    const rows: any[] = props.store.data.slice();
+    const rows: any[] = props.store.tableData;
     const sortedRows = sortBy(rows, sortId);
     return sortedRows;
   };
@@ -43,9 +44,9 @@ const WalkingTable: React.FC<Props> = observer((props: Props) => {
     setSortId(id);
   };
 
-  const renderCell = (content: number | string, id: string) => {
+  const renderCell = (content: number | Date, id: string) => {
     if (id === "date") {
-      return <DateRenderer date={content as string} />;
+      return <DateRenderer date={`${content}`} />;
     } else {
       const metersNumber = (content as number) % 1000;
       const meters = metersNumber ? `${metersNumber}` : "";
@@ -72,6 +73,28 @@ const WalkingTable: React.FC<Props> = observer((props: Props) => {
       return `${kilometers} ${kilometersMessage} ${meters} ${metersMessage}`;
     }
   };
+
+  const contextMenu = (index: number) => (e: any) => {
+    setItemToEdit(rows[index])
+    e.preventDefault();
+    setAnchorEl(e.currentTarget);
+  };
+
+  const closeModal = () => {
+    setItemToEdit(null);
+    setModalOpen(false);
+  };
+
+  const editItem = () => {
+    setModalOpen(true);
+    setAnchorEl(null);
+  };
+
+  const deleteItem = () => {
+    props.store.deleteItem(itemToEdit!.id)
+    setAnchorEl(null)
+  }
+
   const rows = getSortedRows();
   const key = `${sortId}`;
   return (
@@ -84,13 +107,25 @@ const WalkingTable: React.FC<Props> = observer((props: Props) => {
           renderTrackVertical={({ style, ...props }) => (
             <div
               {...props}
-              style={{ ...style, backgroundColor: "#1C2025", width: "3px", height: "100%", right: "0px", bottom: "0px" }}
+              style={{
+                ...style,
+                backgroundColor: "#1C2025",
+                width: "3px",
+                height: "100%",
+                right: "0px",
+                bottom: "0px",
+              }}
             />
           )}
           renderThumbVertical={({ style, ...props }) => (
             <div
               {...props}
-              style={{ ...style, backgroundColor: "#EC174F", width: "3px", borderRadius: "50%" }}
+              style={{
+                ...style,
+                backgroundColor: "#EC174F",
+                width: "3px",
+                borderRadius: "50%",
+              }}
             />
           )}
         >
@@ -125,7 +160,24 @@ const WalkingTable: React.FC<Props> = observer((props: Props) => {
             </TableHead>
             <TableBody>
               {rows.map((row, index) => (
-                <TableRow key={row["id"]} className={index%2? "WalkingTable-rowOdd": "WalkingTable-rowEven"}>
+                <TableRow
+                  key={row["id"]}
+                  className={
+                    index % 2 ? "WalkingTable-rowOdd" : "WalkingTable-rowEven"
+                  }
+                  onContextMenu={contextMenu(index)}
+                >
+                  <Menu
+                    id="simple-menu"
+                    anchorEl={anchorEl}
+                    open={Boolean(anchorEl)}
+                    onClose={() => setAnchorEl(null)}
+                  >
+                    <MenuItem onClick={editItem}>
+                      Редактировать запись
+                    </MenuItem>
+                    <MenuItem onClick={deleteItem}>Удалить запись</MenuItem>
+                  </Menu>
                   {tableCols.map((col) => (
                     <TableCell key={row[col.id]}>
                       {renderCell(row[col.id], col.id)}
@@ -143,8 +195,12 @@ const WalkingTable: React.FC<Props> = observer((props: Props) => {
       >
         Добавить запись
       </Button>
-      <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
-        <InputForm store={props.store} onClose={() => setModalOpen(false)} />
+      <Modal open={modalOpen} onClose={closeModal}>
+        <InputForm
+          store={props.store}
+          onClose={closeModal}
+          itemToEdit={itemToEdit}
+        />
       </Modal>
     </div>
   );

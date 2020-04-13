@@ -5,19 +5,25 @@ import PedometerStore from "../../store/PedometerStore";
 import "react-datepicker/dist/react-datepicker.css";
 import "./constants/styles.css";
 import { Button, TextField, Typography } from "@material-ui/core";
+import {DBItem} from "../../store/types"
 
 type Props = {
   store: PedometerStore;
   onClose: () => void;
-  id?: number;
+  itemToEdit: DBItem | null;
 };
 
 const InputForm: React.FC<Props> = (props: Props) => {
-  const [date, setDate] = React.useState<Date>(new Date());
-  const [distance, setDistance] = React.useState<number>(0);
-
+  const initialDate = props.itemToEdit? props.itemToEdit.date : new Date()
+  const initialDistance = props.itemToEdit? props.itemToEdit.distance : 0
+  const [date, setDate] = React.useState<Date>(initialDate);
+  const [distance, setDistance] = React.useState<number>(initialDistance);
   const handleApply = () => {
-    props.store.addItem(date, distance);
+    if (props.itemToEdit) {
+      props.store.editItem({id: props.itemToEdit.id, date, distance})
+    } else {
+      props.store.addItem(date, distance);
+    }
     props.onClose();
   };
 
@@ -35,6 +41,7 @@ const InputForm: React.FC<Props> = (props: Props) => {
         <TextField
           type="number"
           onChange={(event: any) => setDistance(event.target.value)}
+          value={distance}
         />
       </div>
       <div className="InputForm-buttonBase">

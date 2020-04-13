@@ -22,12 +22,14 @@ type Props = {
 };
 
 const WalkingChart: React.FC<Props> = observer((props: Props) => {
-  const data = props.store.data;
-  const sortedData = sortBy(data, "date")
-  const preparedData = sortedData.length > 7 ? sortedData.slice(-7) : sortedData
+  const data: any = props.store.chartData;
+  data.forEach((item: any) => {
+    item.date = `${item.date}`
+  })
+  const preparedData = data.length > 7 ? data.slice(-7) : data
 
 const getMinimum = () => {
-  const min = minBy(preparedData, "distance")
+  const min: any = minBy(preparedData, "distance")
   if (min) {
     return min.distance
   }
@@ -35,7 +37,7 @@ const getMinimum = () => {
 }
 
 const getMaximum = () => {
-  const max = maxBy(preparedData, "distance")
+  const max: any = maxBy(preparedData, "distance")
   if (max) {
     return max.distance
   }
