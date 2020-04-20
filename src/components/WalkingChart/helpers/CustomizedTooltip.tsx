@@ -1,9 +1,11 @@
 import * as React from "react";
-import DateRenderer from "../../DateRenderer/DateRenderer";
 import { Typography } from "@material-ui/core";
-import "../constants/styles.css"
 
-class CustomizedTooltip extends React.Component<any> {
+import DateRenderer from "../../DateRenderer/DateRenderer";
+import { TooltipProps } from "../constants/types";
+import "../constants/styles.css";
+
+class CustomizedTooltip extends React.Component<TooltipProps> {
   render() {
     const { active, payload } = this.props;
     if (active && payload) {

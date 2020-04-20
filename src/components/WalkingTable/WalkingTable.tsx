@@ -16,17 +16,16 @@ import {
   MenuItem,
 } from "@material-ui/core";
 import { ArrowUpward } from "@material-ui/icons";
-import InputForm from "../InputForm/InputForm";
-import { tableCols } from "./constants/constants";
 import { sortBy } from "lodash";
 import { Scrollbars } from "react-custom-scrollbars";
-import { DBItem } from "../../store/types";
-import "./constants/styles.css";
-import DateRenderer from "../DateRenderer/DateRenderer";
 
-type Props = {
-  store: PedometerStore;
-};
+import DateRenderer from "../DateRenderer/DateRenderer";
+import InputForm from "../InputForm/InputForm";
+import { tableCols } from "./constants/constants";
+import { getSortedRows, getCellValue } from "./utils/utils";
+import { DBItem } from "../../store/types";
+import { Props } from "./constants/types";
+import "./styles.css";
 
 const WalkingTable: React.FC<Props> = observer((props: Props) => {
   const [sortId, setSortId] = React.useState<string>("date");
@@ -34,11 +33,7 @@ const WalkingTable: React.FC<Props> = observer((props: Props) => {
   const [anchorEl, setAnchorEl] = React.useState<any>(null);
   const [itemToEdit, setItemToEdit] = React.useState<DBItem | null>(null);
 
-  const getSortedRows = () => {
-    const rows: any[] = props.store.tableData;
-    const sortedRows = sortBy(rows, sortId);
-    return sortedRows;
-  };
+  const data = props.store.tableData;
 
   const handleClick = (id: string) => () => {
     setSortId(id);
@@ -48,34 +43,12 @@ const WalkingTable: React.FC<Props> = observer((props: Props) => {
     if (id === "date") {
       return <DateRenderer date={`${content}`} />;
     } else {
-      const metersNumber = (content as number) % 1000;
-      const meters = metersNumber ? `${metersNumber}` : "";
-      const metersLastSymbol = !meters ? "" : meters[meters.length - 1];
-      const metersMessage = !metersLastSymbol
-        ? ""
-        : metersLastSymbol === "1"
-        ? "метр"
-        : metersLastSymbol === "2" ||
-          metersLastSymbol === "3" ||
-          metersLastSymbol === "4"
-        ? "метра"
-        : "метров";
-      const kilometers = `${Math.floor((content as number) / 1000)}`;
-      const kilometersLastSymbol = kilometers[kilometers.length - 1];
-      const kilometersMessage =
-        kilometersLastSymbol === "1"
-          ? "километр"
-          : kilometersLastSymbol === "2" ||
-            kilometersLastSymbol === "3" ||
-            kilometersLastSymbol === "4"
-          ? "километра"
-          : "километров";
-      return `${kilometers} ${kilometersMessage} ${meters} ${metersMessage}`;
+      return getCellValue(content as number);
     }
   };
 
   const contextMenu = (index: number) => (e: any) => {
-    setItemToEdit(rows[index])
+    setItemToEdit(rows[index]);
     e.preventDefault();
     setAnchorEl(e.currentTarget);
   };
@@ -91,20 +64,17 @@ const WalkingTable: React.FC<Props> = observer((props: Props) => {
   };
 
   const deleteItem = () => {
-    props.store.deleteItem(itemToEdit!.id)
-    setAnchorEl(null)
-  }
+    props.store.deleteItem(itemToEdit!.id);
+    setAnchorEl(null);
+  };
 
-  const rows = getSortedRows();
+  const rows = getSortedRows(data, sortId);
   const key = `${sortId}`;
+
   return (
     <div className="WalkingTable-root">
       <TableContainer className={"WalkingTable-tableContainer"} key={key}>
-        <Scrollbars
-          autoHeight
-          autoHeightMin={435}
-          hideTracksWhenNotNeeded
-        >
+        <Scrollbars autoHeight autoHeightMin={435} hideTracksWhenNotNeeded>
           <Table stickyHeader size="small">
             <TableHead>
               <TableRow>
@@ -149,14 +119,12 @@ const WalkingTable: React.FC<Props> = observer((props: Props) => {
                     open={Boolean(anchorEl)}
                     onClose={() => setAnchorEl(null)}
                   >
-                    <MenuItem onClick={editItem}>
-                      Редактировать запись
-                    </MenuItem>
+                    <MenuItem onClick={editItem}>Редактировать запись</MenuItem>
                     <MenuItem onClick={deleteItem}>Удалить запись</MenuItem>
                   </Menu>
-                  {tableCols.map((col) => (
-                    <TableCell key={row[col.id]}>
-                      {renderCell(row[col.id], col.id)}
+                  {tableCols.map((col, index) => (
+                    <TableCell key={`${col.id}${index}`}>
+                      {renderCell(row[col.id as keyof DBItem], col.id)}
                     </TableCell>
                   ))}
                 </TableRow>
