@@ -9,24 +9,3 @@ export type Props = {
     distance: number;
     date: string
 }
-
-export type LabelProps = {
-  x: number;
-  y: number;
-  value: string
-}
-
-export type TooltipProps = {
-  active: boolean;
-  payload: any[]
-}
-
-export type XAxisTickProps = {
-  x: number;
-  payload: any
-}
-
-export type YAxisTickProps = {
-  y: number;
-  payload: any
-}

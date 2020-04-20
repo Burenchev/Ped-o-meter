@@ -1,8 +1,6 @@
 import * as React from "react";
 
-import { XAxisTickProps } from "../constants/types";
-
-class CustomizedXAxisTick extends React.Component<XAxisTickProps> {
+class CustomizedXAxisTick extends React.Component<any> { // any оставлен намеренно, не удалось найти типы пропсов для кастомных элементов recharts
   render() {
     const { x, payload } = this.props;
 

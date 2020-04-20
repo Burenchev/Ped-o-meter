@@ -1,8 +1,6 @@
 import * as React from "react";
 
-import {YAxisTickProps} from "../constants/types"
-
-class CustomizedYAxisTick extends React.Component<YAxisTickProps> {
+class CustomizedYAxisTick extends React.Component<any> { // any оставлен намеренно, не удалось найти типы пропсов для кастомных элементов recharts
   render() {
     const { y, payload } = this.props;
     return (

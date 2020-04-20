@@ -1,8 +1,6 @@
 import * as React from "react";
 
-import { LabelProps } from "../constants/types";
-
-class CustomizedLabel extends React.Component<LabelProps> {
+class CustomizedLabel extends React.Component<any> { // any оставлен намеренно, не удалось найти типы пропсов для кастомных элементов recharts
   render() {
     const { x, y, value } = this.props;
     return (

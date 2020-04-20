@@ -4,7 +4,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Button, TextField, Typography } from "@material-ui/core";
 
 import { Props } from "./constants/types";
-import ".styles.css";
+import "./styles.css";
 
 const InputForm: React.FC<Props> = (props: Props) => {
   const initialDate = props.itemToEdit ? props.itemToEdit.date : new Date();
